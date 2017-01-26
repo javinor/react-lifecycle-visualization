@@ -49,61 +49,88 @@
 	const React = __webpack_require__(1);
 	const ReactDOM = __webpack_require__(32);
 
-	class LifeCycleLogger extends React.PureComponent {
+	const start = Date.now();
+
+	function getRandomColor() {
+	  var letters = '0123456789ABCDEF';
+	  var color = '#';
+	  for (var i = 0; i < 6; i++) {
+	    color += letters[Math.floor(Math.random() * 16)];
+	  }
+	  return color;
+	}
+
+	class LifeCycleLogger extends React.Component {
+	  // 
 	  componentWillMount() {
-	    console.log(`${this.props.name} componentWillMount`);
+	    console.log(`${Date.now() - start}: ${this.props.name} componentWillMount`);
 	  }
-	  // render
 	  componentDidMount() {
-	    console.log(`${this.props.name} componentDidMount`);
+	    console.log(`${Date.now() - start}: ${this.props.name} componentDidMount`);
 	  }
+
 	  componentWillReceiveProps() {
-	    console.log(`${this.props.name} componentWillReceiveProps`);
+	    console.log(`${Date.now() - start}: ${this.props.name} componentWillReceiveProps`);
 	  }
 	  shouldComponentUpdate() {
-	    console.log(`${this.props.name} shouldComponentUpdate`);
+	    console.log(`${Date.now() - start}: ${this.props.name} shouldComponentUpdate`);
+	    return true;
 	  }
 	  componentWillUpdate() {
-	    console.log(`${this.props.name} componentWillUpdate`);
+	    console.log(`${Date.now() - start}: ${this.props.name} componentWillUpdate`);
 	  }
-	  // render
 	  componentDidUpdate() {
-	    console.log(`${this.props.name} componentDidUpdate`);
+	    console.log(`${Date.now() - start}: ${this.props.name} componentDidUpdate`);
 	  }
 
 	  componentWillUnmount() {
-	    console.log(`${this.props.name} componentWillUnmount`);
+	    console.log(`${Date.now() - start}: ${this.props.name} componentWillUnmount`);
 	  }
 
 	  render() {
-	    console.log(`${this.props.name} render`);
+	    console.log(`${Date.now() - start}: ${this.props.name} render`);
+	    const bgColor = getRandomColor();
 	    return React.createElement(
 	      'div',
-	      null,
+	      { style: { 'backgroundColor': { bgColor } } },
 	      this.props.name,
 	      this.props.children
 	    );
 	  }
 	}
 
-	class App extends React.PureComponent {
+	class App extends React.Component {
+	  triggerRender() {
+	    this.setState({});
+	  }
+
 	  render() {
 	    return React.createElement(
-	      LifeCycleLogger,
-	      { name: 'container' },
+	      'div',
+	      null,
 	      React.createElement(
-	        LifeCycleLogger,
-	        { name: 'father' },
-	        React.createElement(LifeCycleLogger, { name: 'first' }),
-	        React.createElement(LifeCycleLogger, { name: 'second' }),
-	        React.createElement(LifeCycleLogger, { name: 'third' })
+	        'button',
+	        { onClick: this.triggerRender.bind(this) },
+	        'App.setState(',
+	        ')'
 	      ),
 	      React.createElement(
 	        LifeCycleLogger,
-	        { name: 'mother' },
-	        React.createElement(LifeCycleLogger, { name: 'a' }),
-	        React.createElement(LifeCycleLogger, { name: 'b' }),
-	        React.createElement(LifeCycleLogger, { name: 'c' })
+	        { name: 'container' },
+	        React.createElement(
+	          LifeCycleLogger,
+	          { name: 'father' },
+	          React.createElement(LifeCycleLogger, { name: 'first' }),
+	          React.createElement(LifeCycleLogger, { name: 'second' }),
+	          React.createElement(LifeCycleLogger, { name: 'third' })
+	        ),
+	        React.createElement(
+	          LifeCycleLogger,
+	          { name: 'mother' },
+	          React.createElement(LifeCycleLogger, { name: 'a' }),
+	          React.createElement(LifeCycleLogger, { name: 'b' }),
+	          React.createElement(LifeCycleLogger, { name: 'c' })
+	        )
 	      )
 	    );
 	  }

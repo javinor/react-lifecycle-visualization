@@ -3,37 +3,40 @@
 const React = require('react')
 const ReactDOM = require('react-dom')
 
+const start = Date.now()
+
+function getRandomColor() {
+    var letters = '0123456789ABCDEF';
+    var color = '#';
+    for (var i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
 class LifeCycleLogger extends React.Component {
-  componentWillMount() {
-    console.log(`${this.props.name} componentWillMount`)
-  }
-  // render
-  componentDidMount() {
-    console.log(`${this.props.name} componentDidMount`)
-  }
-  componentWillReceiveProps() {
-    console.log(`${this.props.name} componentWillReceiveProps`)
-  }
-  shouldComponentUpdate() {
-    console.log(`${this.props.name} shouldComponentUpdate`)
+  componentWillMount() {        
+    console.log(`${Date.now() - start}: ${this.props.name} componentWillMount`) }
+  componentDidMount() {         
+    console.log(`${Date.now() - start}: ${this.props.name} componentDidMount`) }
+  componentWillReceiveProps() { 
+    console.log(`${Date.now() - start}: ${this.props.name} componentWillReceiveProps`) }
+  componentWillUpdate() {       
+    console.log(`${Date.now() - start}: ${this.props.name} componentWillUpdate`) }
+  componentDidUpdate() {        
+    console.log(`${Date.now() - start}: ${this.props.name} componentDidUpdate`) }
+  componentWillUnmount() {      
+    console.log(`${Date.now() - start}: ${this.props.name} componentWillUnmount`) }
+
+  shouldComponentUpdate() {console.log(`${Date.now() - start}: ${this.props.name} shouldComponentUpdate`)
     return true
   }
-  componentWillUpdate() {
-    console.log(`${this.props.name} componentWillUpdate`)
-  }
-  // render
-  componentDidUpdate() {
-    console.log(`${this.props.name} componentDidUpdate`)
-  }
   
-  componentWillUnmount() {
-    console.log(`${this.props.name} componentWillUnmount`)
-  }
-
   render() {
-      console.log(`${this.props.name} render`);
+      console.log(`${Date.now() - start}: ${this.props.name} render`);
+      const bgColor = getRandomColor()
       return (
-          <div>
+          <div style={{backgroundColor: bgColor}}>
             {this.props.name}
             {this.props.children}
           </div>
@@ -42,23 +45,31 @@ class LifeCycleLogger extends React.Component {
 }
 
 class App extends React.Component {
+  triggerRender() {
+    this.setState({})
+  }
+
   render() {
     return (
-      <LifeCycleLogger name="container">
-        <LifeCycleLogger name="father">
-          <LifeCycleLogger name="first" />
-          <LifeCycleLogger name="second" />
-          <LifeCycleLogger name="third" />
+      <div>
+        <button onClick={this.triggerRender.bind(this)}>App.setState({})</button>
+        <LifeCycleLogger name="container">
+          <LifeCycleLogger name="father">
+            <LifeCycleLogger name="first" />
+            <LifeCycleLogger name="second" />
+            <LifeCycleLogger name="third" />
+          </LifeCycleLogger>
+          <LifeCycleLogger name="mother">
+            <LifeCycleLogger name="a" />
+            <LifeCycleLogger name="b" />
+            <LifeCycleLogger name="c" />
+          </LifeCycleLogger>
         </LifeCycleLogger>
-        <LifeCycleLogger name="mother">
-          <LifeCycleLogger name="a" />
-          <LifeCycleLogger name="b" />
-          <LifeCycleLogger name="c" />
-        </LifeCycleLogger>
-      </LifeCycleLogger>
+      </div>
     )
   }
 }
+
 
 ReactDOM.render(
   <App/>,
