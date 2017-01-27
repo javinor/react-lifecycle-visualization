@@ -6,12 +6,12 @@ const ReactDOM = require('react-dom')
 const start = Date.now()
 
 function getRandomColor() {
-    var letters = '0123456789ABCDEF';
-    var color = '#';
-    for (var i = 0; i < 6; i++ ) {
-        color += letters[Math.floor(Math.random() * 16)];
+    const letters = '0123456789ABCDEF'
+    let color = '#'
+    for (let i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * 16)]
     }
-    return color;
+    return color
 }
 
 class LifeCycleLogger extends React.Component {
@@ -70,8 +70,4 @@ class App extends React.Component {
   }
 }
 
-
-ReactDOM.render(
-  <App/>,
-  document.getElementById('app')
-);
+ReactDOM.render(<App/>, document.getElementById('app'))
